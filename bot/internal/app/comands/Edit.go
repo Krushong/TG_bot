@@ -1,12 +1,13 @@
 package comands
 
 import (
+	"TGbot/bot/internal/product"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"strconv"
 )
 
-func (c *Commander) Get(inputMessage *tgbotapi.Message) {
+func (c *Commander) Edit(inputMessage *tgbotapi.Message) {
 
 	args := inputMessage.CommandArguments()
 
@@ -16,20 +17,13 @@ func (c *Commander) Get(inputMessage *tgbotapi.Message) {
 		return
 	}
 
-	product, err := c.productService.Get(idx)
-	if err != nil {
-		log.Println("fail to get product with idx %d: %v", idx, err)
-		return
-	}
+	c.productService.Edit(idx)
 
 	msg := tgbotapi.NewMessage(
 		inputMessage.Chat.ID,
-		product.Title,
+		"Please enter text",
 	)
 
+	product.EditElement = true
 	c.bot.Send(msg)
-}
-
-func init() {
-	registeredComands["get"] = (*Commander).Get
 }

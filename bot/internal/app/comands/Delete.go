@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func (c *Commander) Get(inputMessage *tgbotapi.Message) {
+func (c *Commander) Delete(inputMessage *tgbotapi.Message) {
 
 	args := inputMessage.CommandArguments()
 
@@ -16,20 +16,12 @@ func (c *Commander) Get(inputMessage *tgbotapi.Message) {
 		return
 	}
 
-	product, err := c.productService.Get(idx)
-	if err != nil {
-		log.Println("fail to get product with idx %d: %v", idx, err)
-		return
-	}
+	c.productService.Delete(idx)
 
 	msg := tgbotapi.NewMessage(
 		inputMessage.Chat.ID,
-		product.Title,
+		"Element delete",
 	)
 
 	c.bot.Send(msg)
-}
-
-func init() {
-	registeredComands["get"] = (*Commander).Get
 }

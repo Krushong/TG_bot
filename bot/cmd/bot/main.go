@@ -1,6 +1,8 @@
 package main
 
 import (
+	"TGbot/bot/internal/app/comands"
+	"TGbot/bot/internal/product"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 )
@@ -25,32 +27,11 @@ func main() {
 		log.Panic(err)
 	}
 
+	productService := product.NewService()
+
+	commander := comands.NewCommander(bot, productService)
+
 	for update := range updates {
-		if update.Message != nil { // If we got a message
-			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-
-			switch update.Message.Command() {
-			case "help":
-				helpCommand(bot, update.Message)
-			default:
-				defaultBehavior(bot, update.Message)
-			}
-
-			defaultBehavior(bot, update.Message)
-		}
+		commander.HandleUpdate(update)
 	}
-}
-
-func helpCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
-	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "/help - help")
-
-	bot.Send(msg)
-}
-
-func defaultBehavior(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
-	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "You wrote: "+inputMessage.Text)
-	log.Printf("[%s] %s", inputMessage.From.UserName, inputMessage.Text)
-	//msg.ReplyToMessageID = update.Message.MessageID
-
-	bot.Send(msg)
 }
