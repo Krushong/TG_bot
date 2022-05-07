@@ -5,11 +5,11 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-var letters []string
+var mapStep map[string]string
 var board string
 
 func CreateCleanBoard(board string) string {
-	letters = []string{"0", "1", "2", "3", "4", "5", "6", "7", "8"}
+	mapStep = map[string]string{"0": "-", "1": "-", "3": "-", "4": "-", "5": "-", "6": "-", "7": "-", "8": "-"}
 
 	board = "0|1|2\n" +
 		"_____\n" +
@@ -21,23 +21,13 @@ func CreateCleanBoard(board string) string {
 
 func (c *Commander) xo(inputMessage *tgbotapi.Message) {
 
-	//args := inputMessage.CommandArguments()
-	//
-	//idx, err := strconv.Atoi(args)
-	//if err != nil {
-	//	log.Println("wrong args", args)
-	//	return
-	//}
-	//
-	//c.productService.Xo(idx)
-
 	product.Bollgame = true
 
 	board := CreateCleanBoard("")
 
 	msg := tgbotapi.NewMessage(
 		inputMessage.Chat.ID,
-		board+"\nВведите число где будет (О)",
+		board+"\nВведите число где будет (X)",
 	)
 
 	c.bot.Send(msg)
