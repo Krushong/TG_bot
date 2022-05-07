@@ -23,7 +23,7 @@ func (c *Commander) xo(inputMessage *tgbotapi.Message) {
 
 	product.Bollgame = true
 
-	board := CreateCleanBoard("")
+	board = CreateCleanBoard("")
 
 	msg := tgbotapi.NewMessage(
 		inputMessage.Chat.ID,

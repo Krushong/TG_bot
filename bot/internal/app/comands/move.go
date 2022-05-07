@@ -27,11 +27,17 @@ func StepComp(NewChar string) string {
 func Step(NewChar, OldChar string) string {
 	boardBefor := board
 	if mapStep[OldChar] != "X" && mapStep[OldChar] != "O" {
-		strings.Replace(board, OldChar, NewChar, 1)
-	}
-	if boardBefor == board {
-		mapStep[OldChar] = NewChar
-		return StepComp("O")
+		board = strings.Replace(board, OldChar, NewChar, 1)
+		fmt.Println(board)
+
+		if boardBefor != board {
+			mapStep[OldChar] = NewChar
+			if proverka("X") {
+				return (board + "\nТы выиграл красава игра закончина введи заново /xo")
+			} else {
+				return StepComp("O")
+			}
+		}
 	} else {
 		return "Введен повторяющийся символ"
 	}
@@ -44,8 +50,8 @@ func (c *Commander) move(inputMessage *tgbotapi.Message) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	if NumberGameChar < 1 || NumberGameChar > 9 {
+	fmt.Println(NumberGameChar)
+	if NumberGameChar < 0 || NumberGameChar > 9 {
 		errtext := fmt.Sprintf("Вы ввели %s Введите число от 1 до 9 или /EndGame", GameChar)
 		msg := tgbotapi.NewMessage(
 			inputMessage.Chat.ID,
@@ -56,11 +62,11 @@ func (c *Commander) move(inputMessage *tgbotapi.Message) {
 		return
 	}
 
-	Step("X", GameChar)
-
+	msgboard := Step("X", GameChar)
+	fmt.Println(msgboard)
 	msg := tgbotapi.NewMessage(
 		inputMessage.Chat.ID,
-		board,
+		msgboard,
 	)
 
 	c.bot.Send(msg)
