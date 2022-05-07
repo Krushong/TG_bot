@@ -7,7 +7,7 @@ import (
 func (c *Commander) Help(inputMessage *tgbotapi.Message) {
 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID,
 		"/help - help \n/list - list"+
-			"\n/get - get \n/add - add \n/xo - xo")
+			"\n/get - get \n/add - add \n/xo - XO")
 
 	c.bot.Send(msg)
 }
